@@ -1,4 +1,4 @@
-package com.flowerShop.controllers;
+package com.flowerShop.web.controllers;
 
 public interface ProductController {
 }
