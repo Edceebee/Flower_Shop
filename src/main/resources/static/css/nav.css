@@ -8,7 +8,7 @@ body {
     margin: 1rem;
 }
 
-nav {
+#nav {
     display: flex;
     flex-direction: row;
     background-color: #fef2e5;
