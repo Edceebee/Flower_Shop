@@ -3,7 +3,8 @@ package com.flowerShop.api.controllers;
 import com.flowerShop.api.controllers.dtos.APIResponse;
 import com.flowerShop.api.controllers.dtos.APIResponseMessage;
 import com.flowerShop.api.controllers.dtos.user.UserRegReqDTO;
-import com.flowerShop.api.controllers.dtos.user.UserRegRespDTO;
+import com.flowerShop.api.controllers.dtos.user.UserDetailsRespDTO;
+import com.flowerShop.api.models.User.UserLoginReqDTO;
 import com.flowerShop.api.services.User.UserService;
 import com.flowerShop.exceptions.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,12 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegReqDTO userRegReqDTO) {
         try {
-            UserRegRespDTO userRegRespDTO = userService.register(userRegReqDTO);
+            UserDetailsRespDTO userDetailsRespDTO = userService.register(userRegReqDTO);
             return new ResponseEntity<>(
                     APIResponse.builder()
                             .isSuccessful(true)
                             .message(APIResponseMessage.USER_REGISTRATION_SUCCESS.toString())
-                            .responseDTO(userRegRespDTO)
+                            .responseDTO(userDetailsRespDTO)
                             .build(),
                     HttpStatus.CREATED
             );
@@ -36,7 +37,30 @@ public class UserController {
             return new ResponseEntity<>(
                     APIResponse.builder()
                             .isSuccessful(false)
-                            .message(APIResponseMessage.USER_REGISTRATION_SUCCESS.toString())
+                            .message(userException.getMessage())
+                            .build(),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserLoginReqDTO userLoginReqDTO) {
+        try {
+            UserDetailsRespDTO userLoginRespDTO = userService.login(userLoginReqDTO);
+            return new ResponseEntity<>(
+                    APIResponse.builder()
+                            .isSuccessful(true)
+                            .message(APIResponseMessage.USER_LOGIN_SUCCESS.toString())
+                            .responseDTO(userLoginRespDTO)
+                            .build(),
+                    HttpStatus.OK
+            );
+        }
+        catch (UserException userException) {
+            return new ResponseEntity<>(
+                    APIResponse.builder()
+                            .isSuccessful(false)
+                            .message(userException.getMessage())
                             .build(),
                     HttpStatus.BAD_REQUEST);
         }

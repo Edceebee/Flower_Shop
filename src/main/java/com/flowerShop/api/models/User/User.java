@@ -5,6 +5,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.io.ByteArrayInputStream;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document
@@ -29,6 +37,40 @@ public class User {
     private List<UserCategory> userCategories;
 
     private UserProfile profile;
+    private LocalDateTime createdOn;
+    private LocalDateTime updatedOn;
+
+    public static String hashPassword(String password) {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        try {
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            try {
+                byte[] hash = factory.generateSecret(spec).getEncoded();
+
+                StringBuilder buffer = new StringBuilder();
+
+                for(byte hashValue: hash) {
+                    buffer.append(hashValue);
+                }
+
+                String hashedPassword = buffer.toString();
+                System.out.println("PHash: " + password + " -> " + hashedPassword);
+            }
+            catch (InvalidKeySpecException exception) {
+                // TODO: 3/30/21 Use Logger!
+                System.err.println("Wahala dey oo!");
+            }
+        }
+        catch (NoSuchAlgorithmException exception) {
+            System.err.println("Double Wahala!");
+        }
+
+        return password;
+    }
 
     public void addCategories(char[] userCategories) {
         for (int i = 0; i < userCategories.length; i++) {

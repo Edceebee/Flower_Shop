@@ -2,6 +2,7 @@ package com.flowerShop.api.models.User;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -18,5 +19,5 @@ public class UserProfile {
     private Date dateOfBirth;
 
     private List<Address> addresses;
-
+    private LocalDateTime updatedOn;
 }

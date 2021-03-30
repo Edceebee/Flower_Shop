@@ -2,14 +2,17 @@ package com.flowerShop.api.services.User;
 
 import com.flowerShop.api.models.User.User;
 import com.flowerShop.api.controllers.dtos.user.UserRegReqDTO;
-import com.flowerShop.api.controllers.dtos.user.UserRegRespDTO;
+import com.flowerShop.api.controllers.dtos.user.UserDetailsRespDTO;
+import com.flowerShop.api.models.User.UserLoginReqDTO;
 import com.flowerShop.api.models.User.UserProfile;
 import com.flowerShop.api.repositories.UserRepository;
 import com.flowerShop.exceptions.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,7 +21,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public UserRegRespDTO register(UserRegReqDTO userRegDTO) throws UserException {
+    public UserDetailsRespDTO register(UserRegReqDTO userRegDTO) throws UserException {
         if(userRegDTO == null) {
             throw new UserException("User Registration Information not Supplied");
         }
@@ -29,8 +32,8 @@ public class UserServiceImpl implements UserService {
         User newUser = User
                 .builder()
                 .username(userRegDTO.getUsername()).primaryEmailAddress(userRegDTO.getEmailAddress())
-                .tel(userRegDTO.getTel()).passwordHash(userRegDTO.getPassword()).userCategories(new ArrayList<>())
-                .profile(new UserProfile())
+                .tel(userRegDTO.getTel()).passwordHash(User.hashPassword(userRegDTO.getPassword())).userCategories(new ArrayList<>())
+                .profile(new UserProfile()).createdOn(LocalDateTime.now())
                 .build();
 
         newUser.addCategories(userRegDTO.getUserCategoryNumbers());
@@ -38,19 +41,49 @@ public class UserServiceImpl implements UserService {
         return save(newUser);
     }
 
-    private UserRegRespDTO save(User user) {
+    @Override
+    public UserDetailsRespDTO login(UserLoginReqDTO userLoginReqDTO) throws UserException {
+        if(userLoginReqDTO == null) {
+            throw new UserException("User Login Information not Supplied");
+        }
+        
+        Optional<User> foundUserOpt = userRepository.findUserByUsernameOrPrimaryEmailAddress(
+                userLoginReqDTO.getUsername(), userLoginReqDTO.getEmailAddress());
+
+        if(foundUserOpt.isPresent()) {
+            User foundUser = foundUserOpt.get();
+
+            if(User.hashPassword(userLoginReqDTO.getPassWord())
+                    .equals(foundUser.getPasswordHash())) {
+
+                return serializeUserToDTO(foundUser);
+            }
+            else {
+                throw new UserException("Incorrect Password Supplied");
+            }
+        }
+        else {
+            throw new UserException("Incorrect Username or Email Address");
+        }
+    }
+
+    private UserDetailsRespDTO save(User user) {
         User savedUser = userRepository.save(user);
+        return serializeUserToDTO(savedUser);
+    }
 
-        char[] userCategoryNumbers = savedUser.getUserCategoryNumbers();
+    private UserDetailsRespDTO serializeUserToDTO(User user) {
 
-        return UserRegRespDTO
+        char[] userCategoryNumbers = user.getUserCategoryNumbers();
+
+        return UserDetailsRespDTO
                 .builder()
-                .username(savedUser.getUsername()).emailAddress(savedUser.getPrimaryEmailAddress())
-                .tel(savedUser.getTel()).userCategoryNumbers(userCategoryNumbers)
-                .firstName(savedUser.getProfile().getFirstName()).lastName(savedUser.getProfile().getLastName())
-                .middleName(savedUser.getProfile().getMiddleName())
-                .dateOfBirth(savedUser.getProfile().getDateOfBirth())
-                .addresses(savedUser.getProfile().getAddresses())
+                .username(user.getUsername()).emailAddress(user.getPrimaryEmailAddress())
+                .tel(user.getTel()).userCategoryNumbers(userCategoryNumbers)
+                .firstName(user.getProfile().getFirstName()).lastName(user.getProfile().getLastName())
+                .middleName(user.getProfile().getMiddleName())
+                .dateOfBirth(user.getProfile().getDateOfBirth())
+                .addresses(user.getProfile().getAddresses())
                 .build();
     }
 }

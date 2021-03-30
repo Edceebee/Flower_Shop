@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Builder
 
-public class UserRegRespDTO {
+public class UserDetailsRespDTO {
 
     private String username;
     @NonNull
