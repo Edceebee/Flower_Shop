@@ -11,13 +11,21 @@
 <!--    <link rel="stylesheet" th:href="@{css/nav.css}">-->
     <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="/css/landing/section2.css">
+<!--    link to section 3 css-->
+    <link rel="stylesheet" href="/css/landing/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
 
 <!--    <h1>Welcome to the Flower Shopppp!</h1>-->
     <nav th:insert="nav :: nav"></nav>
     <section th:insert="landing/section2 :: section_2"></section>
+<section th:insert="landing/section3 :: section3"></section>
+
 
 </body>
 </html>
