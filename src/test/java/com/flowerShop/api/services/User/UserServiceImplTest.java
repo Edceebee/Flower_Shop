@@ -7,7 +7,7 @@ import com.flowerShop.api.models.User.UserCategory;
 import com.flowerShop.api.models.User.UserLoginReqDTO;
 import com.flowerShop.api.models.User.UserProfile;
 import com.flowerShop.api.repositories.UserRepository;
-import com.flowerShop.exceptions.UserException;
+import com.flowerShop.api.exceptions.UserException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

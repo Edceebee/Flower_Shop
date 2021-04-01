@@ -6,7 +6,7 @@ import com.flowerShop.api.controllers.dtos.user.UserRegReqDTO;
 import com.flowerShop.api.controllers.dtos.user.UserDetailsRespDTO;
 import com.flowerShop.api.models.User.UserLoginReqDTO;
 import com.flowerShop.api.services.User.UserService;
-import com.flowerShop.exceptions.UserException;
+import com.flowerShop.api.exceptions.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
