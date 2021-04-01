@@ -6,7 +6,7 @@ import com.flowerShop.api.controllers.dtos.user.UserDetailsRespDTO;
 import com.flowerShop.api.models.User.UserLoginReqDTO;
 import com.flowerShop.api.models.User.UserProfile;
 import com.flowerShop.api.repositories.UserRepository;
-import com.flowerShop.exceptions.UserException;
+import com.flowerShop.api.exceptions.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,20 @@ public class UserServiceImpl implements UserService {
         }
 
         // TODO: 3/28/21 a validation method that ensures that each required field is present
-        // lombok @NonNull already took care of this, great!
+
+        String username = userRegDTO.getUsername();
+        if(username != null && !(username.isEmpty())) {
+            if(usernameExists(username)) {
+                throw new UserException("Username already taken");
+            }
+        }
+
+        String emailAddress = userRegDTO.getEmailAddress();
+        if(!(emailAddress.isEmpty())) {
+            if(emailAddressExists(emailAddress)) {
+                throw new UserException("Email address matches an existing account");
+            }
+        }
 
         User newUser = User
                 .builder()
@@ -41,19 +54,32 @@ public class UserServiceImpl implements UserService {
         return save(newUser);
     }
 
+    private boolean emailAddressExists(String emailAddress) {
+        Optional<User> foundUser = userRepository.findUserByPrimaryEmailAddress(emailAddress);
+        return foundUser.isPresent();
+    }
+
+    private boolean usernameExists(String username) {
+        Optional<User> foundUser = userRepository.findUserByUsername(username);
+        return foundUser.isPresent();
+    }
+
     @Override
     public UserDetailsRespDTO login(UserLoginReqDTO userLoginReqDTO) throws UserException {
         if(userLoginReqDTO == null) {
             throw new UserException("User Login Information not Supplied");
         }
-        
-        Optional<User> foundUserOpt = userRepository.findUserByUsernameOrPrimaryEmailAddress(
-                userLoginReqDTO.getUsername(), userLoginReqDTO.getEmailAddress());
+
+        Optional<User> foundUserOpt = userRepository.findUserByUsername(userLoginReqDTO.getUsername());
+
+        if(foundUserOpt.isEmpty()){
+            foundUserOpt = userRepository.findUserByPrimaryEmailAddress(userLoginReqDTO.getEmailAddress());
+        }
 
         if(foundUserOpt.isPresent()) {
             User foundUser = foundUserOpt.get();
 
-            if(User.hashPassword(userLoginReqDTO.getPassWord())
+            if(User.hashPassword(userLoginReqDTO.getPassword())
                     .equals(foundUser.getPasswordHash())) {
 
                 return serializeUserToDTO(foundUser);

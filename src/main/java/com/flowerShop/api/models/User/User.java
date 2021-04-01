@@ -13,6 +13,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Document
@@ -58,7 +59,6 @@ public class User {
                 }
 
                 String hashedPassword = buffer.toString();
-                System.out.println("PHash: " + password + " -> " + hashedPassword);
             }
             catch (InvalidKeySpecException exception) {
                 // TODO: 3/30/21 Use Logger!
@@ -100,10 +100,10 @@ public class User {
 
             switch(userCategories.get(i)) {
                 case BUYER:
-                    userCategoryNumbers[i] = '1';
+                    userCategoryNumbers[i] = UserCategory.BUYER.getFlag();
                     break;
                 case SELLER:
-                    userCategoryNumbers[i] = '2';
+                    userCategoryNumbers[i] = UserCategory.SELLER.getFlag();
                     break;
                 default:
             }
