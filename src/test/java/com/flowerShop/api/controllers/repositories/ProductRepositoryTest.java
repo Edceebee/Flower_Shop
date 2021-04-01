@@ -1,6 +1,7 @@
 package com.flowerShop.api.controllers.repositories;
 
-import com.flowerShop.api.controllers.models.Product;
+import com.flowerShop.api.models.Product.Product;
+import com.flowerShop.api.repositories.product.ProductRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

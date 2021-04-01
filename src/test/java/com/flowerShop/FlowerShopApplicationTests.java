@@ -1,7 +1,7 @@
 package com.flowerShop;
 
-import com.flowerShop.api.controllers.repositories.ProductRepository;
-import com.flowerShop.api.controllers.services.ProductService;
+import com.flowerShop.api.repositories.product.ProductRepository;
+import com.flowerShop.api.services.Product.ProductService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;

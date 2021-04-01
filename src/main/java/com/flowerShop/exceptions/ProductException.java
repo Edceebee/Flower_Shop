@@ -1,4 +1,4 @@
-package com.flowerShop.api.controllers.services;
+package com.flowerShop.exceptions;
 
 import java.security.PrivilegedActionException;
 

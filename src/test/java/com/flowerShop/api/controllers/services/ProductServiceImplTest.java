@@ -1,16 +1,16 @@
 package com.flowerShop.api.controllers.services;
 
-import com.flowerShop.api.controllers.dtos.ProductDTO;
-import com.flowerShop.api.controllers.models.Product;
-import com.flowerShop.api.controllers.repositories.ProductRepository;
-import lombok.Data;
+import com.flowerShop.api.controllers.dtos.product.ProductDTO;
+import com.flowerShop.api.models.Product.Product;
+import com.flowerShop.api.repositories.product.ProductRepository;
+import com.flowerShop.api.services.Product.ProductService;
+import com.flowerShop.exceptions.ProductException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
@@ -58,11 +58,11 @@ class ProductServiceImplTest {
         pDTO.setProductDescription("Honey Biscuits");
 
         Product savedProduct = productService.createNewProduct(pDTO);
-        productService.deleteProduct(savedProduct);
+        productRepository.delete(savedProduct);
         assertEquals(1,productService.getAllProducts().size());
 }
 @Test
-    void testToFindProductBYId(){
+    void testToFindProductBYId() throws ProductException {
     Product newProduct = new Product();
 
     newProduct.setId("ID001");
