@@ -21,13 +21,13 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserRegReqDTO userRegReqDTO) {
+    public ResponseEntity<APIResponse> register(@RequestBody UserRegReqDTO userRegReqDTO) {
         try {
             UserDetailsRespDTO userDetailsRespDTO = userService.register(userRegReqDTO);
             return new ResponseEntity<>(
                     APIResponse.builder()
                             .isSuccessful(true)
-                            .message(APIResponseMessage.USER_REGISTRATION_SUCCESS.toString())
+                            .message(APIResponseMessage.USER_REGISTRATION_SUCCESS.getMessage())
                             .responseDTO(userDetailsRespDTO)
                             .build(),
                     HttpStatus.CREATED
@@ -44,13 +44,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginReqDTO userLoginReqDTO) {
+    public ResponseEntity<APIResponse> login(@RequestBody UserLoginReqDTO userLoginReqDTO) {
         try {
             UserDetailsRespDTO userLoginRespDTO = userService.login(userLoginReqDTO);
             return new ResponseEntity<>(
                     APIResponse.builder()
                             .isSuccessful(true)
-                            .message(APIResponseMessage.USER_LOGIN_SUCCESS.toString())
+                            .message(APIResponseMessage.USER_LOGIN_SUCCESS.getMessage())
                             .responseDTO(userLoginRespDTO)
                             .build(),
                     HttpStatus.OK

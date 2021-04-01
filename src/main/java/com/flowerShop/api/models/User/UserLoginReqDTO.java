@@ -16,6 +16,6 @@ public class UserLoginReqDTO {
     private String emailAddress;
 
     @NonNull
-    private String passWord;
+    private String password;
 
 }
