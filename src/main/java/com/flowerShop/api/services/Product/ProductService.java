@@ -2,7 +2,7 @@ package com.flowerShop.api.services.Product;
 
 import com.flowerShop.api.controllers.dtos.product.ProductDTO;
 import com.flowerShop.api.models.Product.Product;
-import com.flowerShop.exceptions.ProductException;
+import com.flowerShop.api.exceptions.Product.ProductException;
 
 import java.util.List;
 

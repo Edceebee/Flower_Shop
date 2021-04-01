@@ -4,7 +4,7 @@ import com.flowerShop.api.controllers.dtos.product.ProductDTO;
 import com.flowerShop.api.models.Product.Product;
 import com.flowerShop.api.repositories.product.ProductRepository;
 import com.flowerShop.api.services.Product.ProductService;
-import com.flowerShop.exceptions.ProductException;
+import com.flowerShop.api.exceptions.Product.ProductException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
